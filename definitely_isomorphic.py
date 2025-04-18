@@ -88,4 +88,63 @@ E2 = [('1', '2'), ('1', '3'), ('3', '4'), ('4', '1')]
 G2 = (V2, E2)
 
 # Test the function with the example graphs
-decision_tree_candidates(G1, G2)
+print(decision_tree_candidates(G1, G2))
+
+def isomorphism_checker(G1, G2):
+    """
+    Checks which candidate mappings from Method 1 are actual isomorphisms.
+
+    This function translates the edges of G1 using each mapping,
+    and compares them to the edges in G2. If the edge sets match,
+    the mapping is considered a valid isomorphism.
+
+    Parameters:
+        G1 (tuple): (V1, E1) — first graph
+        G2 (tuple): (V2, E2) — second graph
+
+    Returns:
+        list: list of valid isomorphisms (mappings that preserve edge structure)
+    """
+    # Unpack the graph tuples into vertices and edges
+    V1, E1 = G1  
+    V2, E2 = G2 
+
+    # Get vertex mappings from the first method
+    candidates = decision_tree_candidates(G1, G2)
+    
+    # Create dictionaries to convert between vertex labels and their positions in the vertex lists
+    label_to_index_1 = {label: i for i, label in enumerate(V1)}  # Maps vertex labels to their indices in V1
+    label_to_index_2 = {label: i for i, label in enumerate(V2)}  # Maps vertex labels to their indices in V2
+
+    # Transform G2 edges into a set of index pairs and sort them for consistency
+    edge_set_2 = {tuple(sorted((label_to_index_2[u], label_to_index_2[v]))) for u, v in E2} 
+
+    # Initialize an empty list to store isomorphisms mapped from G1 to G2
+    isomorphisms = [] 
+ 
+    # Iterate over each candidate mapping
+    for mapping in candidates:
+        # For each mapping, create a new list of edges for G1 based on the current mapping
+        translated_edges = [] 
+        
+        # Iterate over each edge in the first graph
+        for u, v in E1:
+            # Find the position of the endpoints in the vertices list V1
+            u_idx = label_to_index_1[u]  # Get index position of vertex u in V1
+            v_idx = label_to_index_1[v]  # Get index position of vertex v in V1
+            
+            # Map these vertices to their corresponding vertices in G2 to the current mapping
+            mapped_u = mapping[u_idx]  # Get the corresponding vertex index in G2 for u
+            mapped_v = mapping[v_idx]  # Get the corresponding vertex index in G2 for v
+            
+            translated_edges.append(tuple(sorted((mapped_u, mapped_v))))  # Store the edge in normalized form, sorted for consistency
+        
+        # Check if the translated edges from G1 match the edges of G2
+        if set(translated_edges) == edge_set_2:  # Compare the sets of edges to determine isomorphism
+            isomorphisms.append(mapping)  # If edges are the same, this mapping is a valid isomorphism
+            
+    # Return the list of all valid graph isomorphisms found
+    return isomorphisms 
+
+# Example usage
+print(isomorphism_checker(G1, G2))
