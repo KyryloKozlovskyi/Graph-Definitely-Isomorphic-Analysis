@@ -297,30 +297,172 @@ def filtered_matrix_isomorphisms(G1, G2):
     # Return the list of valid mappings
     return valid
 
+# Graph pairs for testing
+# Pair 1
+# Graph 1: Triangle ABC
+V1 = ['A', 'B', 'C']
+E1 = [('A', 'B'), ('B', 'C'), ('C', 'A')]
+G1 = (V1, E1)  # Graph 1 tuple
 
-# Graphs for testing
-# Example graphs for testing
-# Graph 1: A square with vertices 1, 2, 3, and 4
-V1 = ['1', '2', '3', '4']
-E1 = [('1', '2'), ('1', '3'), ('3', '4'), ('4', '1')]
-G1 = (V1, E1)
+# Graph 2: Triangle XYZ
+V2 = ['X', 'Y', 'Z']
+E2 = [('X', 'Y'), ('Y', 'Z'), ('Z', 'X')]
+G2 = (V2, E2)  # Graph 2 tuple
 
-# Graph 2: A square with vertices 1, 2, 3, and 4
-V2 = ['1', '2', '3', '4']
-E2 = [('1', '2'), ('1', '3'), ('3', '4'), ('4', '1')]
-G2 = (V2, E2)
+# Pair 2
+# Graph 1: Square ABCD
+V3 = ['A', 'B', 'C', 'D']
+E3 = [('A', 'B'), ('B', 'C'), ('C', 'D'), ('D', 'A')]
+G3 = (V3, E3)  # Graph 3 tuple
 
-# Graph 1: A square - worst case scenario for decision tree
-nodes3 = ['a', 'b', 'c', 'd']
-edges3 = [('a', 'b'), ('b', 'c'), ('c', 'd'), ('d', 'a')]
-G3 = (nodes3, edges3)
+# Graph 2: Square WXYZ
+V4 = ['W', 'X', 'Y', 'Z']
+E4 = [('W', 'X'), ('X', 'Y'), ('Y', 'Z'), ('Z', 'W')]
+G4 = (V4, E4)  # Graph 4 tuple
 
-# Graph 2: A square
-nodes4 = ['k', 'm', 'p', 'r']
-edges4 = [('k', 'm'), ('m', 'p'), ('p', 'r'), ('r', 'k')]
-G4 = (nodes4, edges4)
-# Test the function with the example graphs
-print(decision_tree_candidates(G1, G2))
-print(isomorphism_checker(G1, G2))
-print(matrix_isomorphisms(G1, G2))
-print(filtered_matrix_isomorphisms(G1, G2))
+# Pair 3
+# Graph 1: 4-pointed star
+V5 = ['A', 'B', 'C', 'D', 'E']
+E5 = [('A', 'B'), ('A', 'C'), ('A', 'D'), ('A', 'E')]
+G5 = (V5, E5)  # Graph 5 tuple
+
+# Graph 2: 4-pointed star with different labels
+V6 = ['V', 'W', 'X', 'Y', 'Z']
+E6 = [('V', 'W'), ('V', 'X'), ('V', 'Y'), ('V', 'Z')]
+G6 = (V6, E6)  # Graph 6 tuple
+
+# Pair 4
+# Graph 1: Complex graph with 6 vertices
+V7 = ['A', 'B', 'C', 'D', 'E', 'F']
+E7 = [('A', 'B'), ('A', 'C'), ('B', 'D'), ('C', 'E'), ('D', 'F'), ('E', 'F')]
+G7 = (V7, E7)  # Graph 7 tuple
+
+# Graph 2: Complex graph with 6 vertices different labels
+V8 = ['X', 'Y', 'Z', 'W', 'V', 'U']
+E8 = [('X', 'Y'), ('X', 'Z'), ('Y', 'W'), ('Z', 'V'), ('W', 'U'), ('V', 'U')]
+G8 = (V8, E8)  # Graph 8 tuple
+
+# Pair 5
+# Graph 1: Square with diagonal
+V9 = ['A', 'B', 'C', 'D']
+E9 = [('A', 'B'), ('B', 'C'), ('C', 'D'), ('D', 'A'), ('A', 'C')]
+G9 = (V9, E9)  # Graph 9 tuple
+
+# Graph 2: Square without diagonal
+V10 = ['W', 'X', 'Y', 'Z']
+E10 = [('W', 'X'), ('X', 'Y'), ('Y', 'Z'), ('Z', 'W')]
+G10 = (V10, E10)  # Graph 10 tuple
+
+def run_methods():
+    """
+    Test and display isomorphism results for graph pairs.
+    Runs all four methods and prints the results.
+    """
+    
+    # Test Case 1: Triangle Graphs
+    print("\n" + "="*60)
+    print("TEST 1: TRIANGLE GRAPHS")
+    print("="*60)
+    print(f"Graph 1: Vertices {V1}, Edges {E1}")
+    print(f"Graph 2: Vertices {V2}, Edges {E2}")
+    
+    # Get results for each algorithm
+    dt_candidates = decision_tree_candidates(G1, G2)
+    iso_results = isomorphism_checker(G1, G2)
+    matrix_results = matrix_isomorphisms(G1, G2)
+    filtered_results = filtered_matrix_isomorphisms(G1, G2)
+    
+    # Display results
+    print("\nRESULTS:")
+    print(f"Method 1 - Decision Tree Candidates: {len(dt_candidates)} candidates")
+    print(f"Method 2 - Isomorphism Checker: {len(iso_results)} isomorphisms")
+    print(f"Method 3 - Matrix Approach: {len(matrix_results)} isomorphisms")
+    print(f"Method 4 - Filtered Matrix: {len(filtered_results)} isomorphisms")
+    print(f"Graphs are {'ISOMORPHIC' if len(iso_results) > 0 else 'NOT ISOMORPHIC'}")
+    
+    # Test Case 2: Square Graphs
+    print("\n" + "="*60)
+    print("TEST 2: SQUARE GRAPHS")
+    print("="*60)
+    print(f"Graph 1: Vertices {V3}, Edges {E3}")
+    print(f"Graph 2: Vertices {V4}, Edges {E4}")
+    
+    # Get results for each algorithm
+    dt_candidates = decision_tree_candidates(G3, G4)
+    iso_results = isomorphism_checker(G3, G4)
+    matrix_results = matrix_isomorphisms(G3, G4)
+    filtered_results = filtered_matrix_isomorphisms(G3, G4)
+    
+    # Display results
+    print("\nRESULTS:")
+    print(f"Method 1 - Decision Tree Candidates: {len(dt_candidates)} candidates")
+    print(f"Method 2 - Isomorphism Checker: {len(iso_results)} isomorphisms")
+    print(f"Method 3 - Matrix Approach: {len(matrix_results)} isomorphisms")
+    print(f"Method 4 - Filtered Matrix: {len(filtered_results)} isomorphisms")
+    print(f"Graphs are {'ISOMORPHIC' if len(iso_results) > 0 else 'NOT ISOMORPHIC'}")
+    
+    # Test Case 3: Star Graphs
+    print("\n" + "="*60)
+    print("TEST 3: STAR GRAPHS")
+    print("="*60)
+    print(f"Graph 1: Vertices {V5}, Edges {E5}")
+    print(f"Graph 2: Vertices {V6}, Edges {E6}")
+    
+    # Get results for each algorithm
+    dt_candidates = decision_tree_candidates(G5, G6)
+    iso_results = isomorphism_checker(G5, G6)
+    matrix_results = matrix_isomorphisms(G5, G6)
+    filtered_results = filtered_matrix_isomorphisms(G5, G6)
+    
+    # Display results
+    print("\nRESULTS:")
+    print(f"Method 1 - Decision Tree Candidates: {len(dt_candidates)} candidates")
+    print(f"Method 2 - Isomorphism Checker: {len(iso_results)} isomorphisms")
+    print(f"Method 3 - Matrix Approach: {len(matrix_results)} isomorphisms")
+    print(f"Method 4 - Filtered Matrix: {len(filtered_results)} isomorphisms")
+    print(f"Graphs are {'ISOMORPHIC' if len(iso_results) > 0 else 'NOT ISOMORPHIC'}")
+    
+    # Test Case 4: Complex Graphs
+    print("\n" + "="*60)
+    print("TEST 4: COMPLEX GRAPHS")
+    print("="*60)
+    print(f"Graph 1: Vertices {V7}, Edges {E7}")
+    print(f"Graph 2: Vertices {V8}, Edges {E8}")
+    
+    # Get results for each algorithm
+    dt_candidates = decision_tree_candidates(G7, G8)
+    iso_results = isomorphism_checker(G7, G8)
+    matrix_results = matrix_isomorphisms(G7, G8)
+    filtered_results = filtered_matrix_isomorphisms(G7, G8)
+    
+    # Display results
+    print("\nRESULTS:")
+    print(f"Method 1 - Decision Tree Candidates: {len(dt_candidates)} candidates")
+    print(f"Method 2 - Isomorphism Checker: {len(iso_results)} isomorphisms")
+    print(f"Method 3 - Matrix Approach: {len(matrix_results)} isomorphisms")
+    print(f"Method 4 - Filtered Matrix: {len(filtered_results)} isomorphisms")
+    print(f"Graphs are {'ISOMORPHIC' if len(iso_results) > 0 else 'NOT ISOMORPHIC'}")
+    
+    # Test Case 5: Non-isomorphic Graphs
+    print("\n" + "="*60)
+    print("TEST 5: NON-ISOMORPHIC GRAPHS")
+    print("="*60)
+    print(f"Graph 1: Vertices {V9}, Edges {E9}")
+    print(f"Graph 2: Vertices {V10}, Edges {E10}")
+    
+    # Get results for each algorithm
+    dt_candidates = decision_tree_candidates(G9, G10)
+    iso_results = isomorphism_checker(G9, G10)
+    matrix_results = matrix_isomorphisms(G9, G10)
+    filtered_results = filtered_matrix_isomorphisms(G9, G10)
+    
+    # Display results
+    print("\nRESULTS:")
+    print(f"Method 1 - Decision Tree Candidates: {len(dt_candidates)} candidates")
+    print(f"Method 2 - Isomorphism Checker: {len(iso_results)} isomorphisms")
+    print(f"Method 3 - Matrix Approach: {len(matrix_results)} isomorphisms")
+    print(f"Method 4 - Filtered Matrix: {len(filtered_results)} isomorphisms")
+    print(f"Graphs are {'ISOMORPHIC' if len(iso_results) > 0 else 'NOT ISOMORPHIC'}")
+
+run_methods()
+
