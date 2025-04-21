@@ -218,7 +218,7 @@ def matrix_isomorphisms(G1, G2):
         # Check if the transformed matrix equals A1
         if np.array_equal(A1, transformed):
             valid_mappings.append(perm)  # If they are equal, add the permutation to valid mappings
-            
+
     # Return the list of valid mappings
     return valid_mappings
 
@@ -297,172 +297,299 @@ def filtered_matrix_isomorphisms(G1, G2):
     # Return the list of valid mappings
     return valid
 
+
+def compare_method_results(G1, G2):
+    """
+    Verifies that Methods 2, 3, and 4 produce the same results for given graph pairs.
+
+    This function:
+    1. Runs all three isomorphism checking methods
+    2. Normalizes the results to ensure they're comparable
+    3. Compares the sets of mappings from each method
+    4. Reports whether all methods agree
+
+    :param G1: First graph (V1, E1)
+    :param G2: Second graph (V2, E2)
+    :return: True if all methods produce the same results, False otherwise
+    """
+    # Run all three isomorphism checking methods
+    method2_results = isomorphism_checker(G1, G2)
+    method3_results = matrix_isomorphisms(G1, G2)
+    method4_results = filtered_matrix_isomorphisms(G1, G2)
+
+    # Convert each result to a set of tuples for comparison
+    method2_set = set(map(tuple, method2_results))
+    method3_set = set(map(tuple, method3_results))
+    method4_set = set(map(tuple, method4_results))
+
+    # Check if all methods produce the same results
+    methods_match = (method2_set == method3_set) and (method3_set == method4_set)
+
+    # Print details about consistency
+    print("\nMETHOD CONSISTENCY CHECK:")
+    print(f"Methods 2, 3, and 4 produce the same results: {'YES' if methods_match else 'NO'}")
+
+    # If methods don't match, show the differences
+    if not methods_match:
+        print("Differences found:")
+        if method2_set != method3_set:
+            print(f"Method 2 vs Method 3: Different results")
+        if method2_set != method4_set:
+            print(f"Method 2 vs Method 4: Different results")
+        if method3_set != method4_set:
+            print(f"Method 3 vs Method 4: Different results")
+
+    return methods_match
+
+
 # Graph pairs for testing
 # Pair 1
-# Graph 1: Triangle ABC
-V1 = ['A', 'B', 'C']
-E1 = [('A', 'B'), ('B', 'C'), ('C', 'A')]
+# Graph 1: Simple 4-vertex graph
+V1 = ['a', 'b', 'c', 'd']
+E1 = [('a', 'b'), ('a', 'c'), ('b', 'c'), ('b', 'd'), ('c', 'd')]
 G1 = (V1, E1)  # Graph 1 tuple
 
-# Graph 2: Triangle XYZ
-V2 = ['X', 'Y', 'Z']
-E2 = [('X', 'Y'), ('Y', 'Z'), ('Z', 'X')]
+# Graph 2: Simple 4-vertex graph
+V2 = ['e', 'f', 'g', 'h']
+E2 = [('e', 'g'), ('e', 'h'), ('f', 'g'), ('f', 'h'), ('g', 'h')]
 G2 = (V2, E2)  # Graph 2 tuple
 
 # Pair 2
-# Graph 1: Square ABCD
-V3 = ['A', 'B', 'C', 'D']
-E3 = [('A', 'B'), ('B', 'C'), ('C', 'D'), ('D', 'A')]
+# Graph 1: 6-vertex graph
+V3 = ['a', 'b', 'c', 'd', 'e', 'f']
+E3 = [('a', 'b'), ('a', 'c'), ('a', 'd'), ('a', 'e'), ('b', 'd'),
+      ('b', 'e'), ('b', 'f'), ('c', 'd'), ('c', 'f'), ('d', 'f'), ('e', 'f')]
 G3 = (V3, E3)  # Graph 3 tuple
 
-# Graph 2: Square WXYZ
-V4 = ['W', 'X', 'Y', 'Z']
-E4 = [('W', 'X'), ('X', 'Y'), ('Y', 'Z'), ('Z', 'W')]
+# Graph 2: 6-vertex graph
+V4 = ['p', 'q', 'r', 's', 't', 'u']
+E4 = [('p', 'q'), ('p', 's'), ('p', 't'), ('p', 'u'), ('q', 's'),
+      ('q', 't'), ('r', 's'), ('r', 't'), ('r', 'u'), ('s', 'u'), ('t', 'u')]
 G4 = (V4, E4)  # Graph 4 tuple
 
 # Pair 3
-# Graph 1: 4-pointed star
-V5 = ['A', 'B', 'C', 'D', 'E']
-E5 = [('A', 'B'), ('A', 'C'), ('A', 'D'), ('A', 'E')]
+# Graph 1: 5-vertex wheel graph
+V5 = ['a', 'b', 'c', 'd', 'e']
+E5 = [('a', 'b'), ('a', 'c'), ('a', 'd'), ('a', 'e'),
+      ('b', 'c'), ('c', 'd'), ('d', 'e'), ('e', 'b')]
 G5 = (V5, E5)  # Graph 5 tuple
 
-# Graph 2: 4-pointed star with different labels
-V6 = ['V', 'W', 'X', 'Y', 'Z']
-E6 = [('V', 'W'), ('V', 'X'), ('V', 'Y'), ('V', 'Z')]
+# Graph 2: 5-vertex wheel graph
+V6 = ['v', 'w', 'x', 'y', 'z']
+E6 = [('v', 'w'), ('v', 'x'), ('v', 'y'), ('v', 'z'),
+      ('w', 'x'), ('x', 'y'), ('y', 'z'), ('z', 'w')]
 G6 = (V6, E6)  # Graph 6 tuple
 
 # Pair 4
-# Graph 1: Complex graph with 6 vertices
-V7 = ['A', 'B', 'C', 'D', 'E', 'F']
-E7 = [('A', 'B'), ('A', 'C'), ('B', 'D'), ('C', 'E'), ('D', 'F'), ('E', 'F')]
+# Graph 1: 4-vertex complete graph
+V7 = ['a', 'b', 'c', 'd']
+E7 = [('a', 'b'), ('a', 'c'), ('a', 'd'), ('b', 'c'), ('c', 'd')]
 G7 = (V7, E7)  # Graph 7 tuple
 
-# Graph 2: Complex graph with 6 vertices different labels
-V8 = ['X', 'Y', 'Z', 'W', 'V', 'U']
-E8 = [('X', 'Y'), ('X', 'Z'), ('Y', 'W'), ('Z', 'V'), ('W', 'U'), ('V', 'U')]
+# Graph 2: 4-vertex complete graph
+V8 = ['w', 'x', 'y', 'z']
+E8 = [('w', 'x'), ('w', 'y'), ('w', 'z'), ('x', 'y'), ('y', 'z')]
 G8 = (V8, E8)  # Graph 8 tuple
 
 # Pair 5
-# Graph 1: Square with diagonal
+# Graph 1: Square without diagonal non-isomorphic graph
 V9 = ['A', 'B', 'C', 'D']
 E9 = [('A', 'B'), ('B', 'C'), ('C', 'D'), ('D', 'A'), ('A', 'C')]
 G9 = (V9, E9)  # Graph 9 tuple
 
-# Graph 2: Square without diagonal
+# Graph 2: Square without diagonal non-isomorphic graph
 V10 = ['W', 'X', 'Y', 'Z']
 E10 = [('W', 'X'), ('X', 'Y'), ('Y', 'Z'), ('Z', 'W')]
 G10 = (V10, E10)  # Graph 10 tuple
 
+
 def run_methods():
     """
     Test and display isomorphism results for graph pairs.
-    Runs all four methods and prints the results.
+    Runs all four methods and prints the results including all mappings.
     """
-    
-    # Test Case 1: Triangle Graphs
-    print("\n" + "="*60)
-    print("TEST 1: TRIANGLE GRAPHS")
-    print("="*60)
+
+    # Test Case 1: Simple 4-vertex graphs
+    print("\n" + "=" * 60)
+    print("TEST 1: Simple 4-vertex graphs")
+    print("=" * 60)
     print(f"Graph 1: Vertices {V1}, Edges {E1}")
     print(f"Graph 2: Vertices {V2}, Edges {E2}")
-    
+
     # Get results for each algorithm
     dt_candidates = decision_tree_candidates(G1, G2)
     iso_results = isomorphism_checker(G1, G2)
     matrix_results = matrix_isomorphisms(G1, G2)
     filtered_results = filtered_matrix_isomorphisms(G1, G2)
-    
+
     # Display results
     print("\nRESULTS:")
-    print(f"Method 1 - Decision Tree Candidates: {len(dt_candidates)} candidates")
-    print(f"Method 2 - Isomorphism Checker: {len(iso_results)} isomorphisms")
-    print(f"Method 3 - Matrix Approach: {len(matrix_results)} isomorphisms")
-    print(f"Method 4 - Filtered Matrix: {len(filtered_results)} isomorphisms")
-    print(f"Graphs are {'ISOMORPHIC' if len(iso_results) > 0 else 'NOT ISOMORPHIC'}")
-    
-    # Test Case 2: Square Graphs
-    print("\n" + "="*60)
-    print("TEST 2: SQUARE GRAPHS")
-    print("="*60)
+    print(f"Method 1 - Decision Tree Candidates ({len(dt_candidates)}):")
+    for i, mapping in enumerate(dt_candidates, 1):
+        print(f"  Mapping {i}: {V1} → {[V2[idx] for idx in mapping]}")
+
+    print(f"\nMethod 2 - Isomorphism Checker ({len(iso_results)}):")
+    for i, mapping in enumerate(iso_results, 1):
+        print(f"  Isomorphism {i}: {V1} → {[V2[idx] for idx in mapping]}")
+
+    print(f"\nMethod 3 - Matrix Approach ({len(matrix_results)}):")
+    for i, mapping in enumerate(matrix_results, 1):
+        print(f"  Isomorphism {i}: {V1} → {[V2[idx] for idx in mapping]}")
+
+    print(f"\nMethod 4 - Filtered Matrix ({len(filtered_results)}):")
+    for i, mapping in enumerate(filtered_results, 1):
+        print(f"  Isomorphism {i}: {V1} → {[V2[idx] for idx in mapping]}")
+
+    print(f"\nGraphs are {'ISOMORPHIC' if len(iso_results) > 0 else 'NOT ISOMORPHIC'}")
+
+    # Verify that methods 2, 3, and 4 produce identical results
+    compare_method_results(G1, G2)
+
+    # Test Case 2: 6-vertex graph
+    print("\n" + "=" * 60)
+    print("TEST 2: 6-vertex graphs")
+    print("=" * 60)
     print(f"Graph 1: Vertices {V3}, Edges {E3}")
     print(f"Graph 2: Vertices {V4}, Edges {E4}")
-    
+
     # Get results for each algorithm
     dt_candidates = decision_tree_candidates(G3, G4)
     iso_results = isomorphism_checker(G3, G4)
     matrix_results = matrix_isomorphisms(G3, G4)
     filtered_results = filtered_matrix_isomorphisms(G3, G4)
-    
+
     # Display results
     print("\nRESULTS:")
-    print(f"Method 1 - Decision Tree Candidates: {len(dt_candidates)} candidates")
-    print(f"Method 2 - Isomorphism Checker: {len(iso_results)} isomorphisms")
-    print(f"Method 3 - Matrix Approach: {len(matrix_results)} isomorphisms")
-    print(f"Method 4 - Filtered Matrix: {len(filtered_results)} isomorphisms")
-    print(f"Graphs are {'ISOMORPHIC' if len(iso_results) > 0 else 'NOT ISOMORPHIC'}")
-    
-    # Test Case 3: Star Graphs
-    print("\n" + "="*60)
-    print("TEST 3: STAR GRAPHS")
-    print("="*60)
+    print(f"Method 1 - Decision Tree Candidates ({len(dt_candidates)}):")
+    for i, mapping in enumerate(dt_candidates, 1):
+        print(f"  Mapping {i}: {V3} → {[V4[idx] for idx in mapping]}")
+
+    print(f"\nMethod 2 - Isomorphism Checker ({len(iso_results)}):")
+    for i, mapping in enumerate(iso_results, 1):
+        print(f"  Isomorphism {i}: {V3} → {[V4[idx] for idx in mapping]}")
+
+    print(f"\nMethod 3 - Matrix Approach ({len(matrix_results)}):")
+    for i, mapping in enumerate(matrix_results, 1):
+        print(f"  Isomorphism {i}: {V3} → {[V4[idx] for idx in mapping]}")
+
+    print(f"\nMethod 4 - Filtered Matrix ({len(filtered_results)}):")
+    for i, mapping in enumerate(filtered_results, 1):
+        print(f"  Isomorphism {i}: {V3} → {[V4[idx] for idx in mapping]}")
+
+    print(f"\nGraphs are {'ISOMORPHIC' if len(iso_results) > 0 else 'NOT ISOMORPHIC'}")
+
+    # Verify that methods 2, 3, and 4 produce identical results
+    compare_method_results(G3, G4)
+
+    # Apply the same pattern for the remaining test cases...
+    # Test Case 3:  5-vertex wheel graphs
+    print("\n" + "=" * 60)
+    print("TEST 3: 5-vertex wheel graph")
+    print("=" * 60)
     print(f"Graph 1: Vertices {V5}, Edges {E5}")
     print(f"Graph 2: Vertices {V6}, Edges {E6}")
-    
+
     # Get results for each algorithm
     dt_candidates = decision_tree_candidates(G5, G6)
     iso_results = isomorphism_checker(G5, G6)
     matrix_results = matrix_isomorphisms(G5, G6)
     filtered_results = filtered_matrix_isomorphisms(G5, G6)
-    
+
     # Display results
     print("\nRESULTS:")
-    print(f"Method 1 - Decision Tree Candidates: {len(dt_candidates)} candidates")
-    print(f"Method 2 - Isomorphism Checker: {len(iso_results)} isomorphisms")
-    print(f"Method 3 - Matrix Approach: {len(matrix_results)} isomorphisms")
-    print(f"Method 4 - Filtered Matrix: {len(filtered_results)} isomorphisms")
-    print(f"Graphs are {'ISOMORPHIC' if len(iso_results) > 0 else 'NOT ISOMORPHIC'}")
-    
-    # Test Case 4: Complex Graphs
-    print("\n" + "="*60)
-    print("TEST 4: COMPLEX GRAPHS")
-    print("="*60)
+    print(f"Method 1 - Decision Tree Candidates ({len(dt_candidates)}):")
+    for i, mapping in enumerate(dt_candidates, 1):
+        print(f"  Mapping {i}: {V5} → {[V6[idx] for idx in mapping]}")
+
+    print(f"\nMethod 2 - Isomorphism Checker ({len(iso_results)}):")
+    for i, mapping in enumerate(iso_results, 1):
+        print(f"  Isomorphism {i}: {V5} → {[V6[idx] for idx in mapping]}")
+
+    print(f"\nMethod 3 - Matrix Approach ({len(matrix_results)}):")
+    for i, mapping in enumerate(matrix_results, 1):
+        print(f"  Isomorphism {i}: {V5} → {[V6[idx] for idx in mapping]}")
+
+    print(f"\nMethod 4 - Filtered Matrix ({len(filtered_results)}):")
+    for i, mapping in enumerate(filtered_results, 1):
+        print(f"  Isomorphism {i}: {V5} → {[V6[idx] for idx in mapping]}")
+
+    print(f"\nGraphs are {'ISOMORPHIC' if len(iso_results) > 0 else 'NOT ISOMORPHIC'}")
+
+    # Verify that methods 2, 3, and 4 produce identical results
+    compare_method_results(G5, G6)
+
+    # Test Case 4: 4-vertex complete graphs
+    print("\n" + "=" * 60)
+    print("TEST 4: 4-vertex complete graphs")
+    print("=" * 60)
     print(f"Graph 1: Vertices {V7}, Edges {E7}")
     print(f"Graph 2: Vertices {V8}, Edges {E8}")
-    
+
     # Get results for each algorithm
     dt_candidates = decision_tree_candidates(G7, G8)
     iso_results = isomorphism_checker(G7, G8)
     matrix_results = matrix_isomorphisms(G7, G8)
     filtered_results = filtered_matrix_isomorphisms(G7, G8)
-    
+
     # Display results
     print("\nRESULTS:")
-    print(f"Method 1 - Decision Tree Candidates: {len(dt_candidates)} candidates")
-    print(f"Method 2 - Isomorphism Checker: {len(iso_results)} isomorphisms")
-    print(f"Method 3 - Matrix Approach: {len(matrix_results)} isomorphisms")
-    print(f"Method 4 - Filtered Matrix: {len(filtered_results)} isomorphisms")
-    print(f"Graphs are {'ISOMORPHIC' if len(iso_results) > 0 else 'NOT ISOMORPHIC'}")
-    
-    # Test Case 5: Non-isomorphic Graphs
-    print("\n" + "="*60)
-    print("TEST 5: NON-ISOMORPHIC GRAPHS")
-    print("="*60)
+    print(f"Method 1 - Decision Tree Candidates ({len(dt_candidates)}):")
+    for i, mapping in enumerate(dt_candidates, 1):
+        print(f"  Mapping {i}: {V7} → {[V8[idx] for idx in mapping]}")
+
+    print(f"\nMethod 2 - Isomorphism Checker ({len(iso_results)}):")
+    for i, mapping in enumerate(iso_results, 1):
+        print(f"  Isomorphism {i}: {V7} → {[V8[idx] for idx in mapping]}")
+
+    print(f"\nMethod 3 - Matrix Approach ({len(matrix_results)}):")
+    for i, mapping in enumerate(matrix_results, 1):
+        print(f"  Isomorphism {i}: {V7} → {[V8[idx] for idx in mapping]}")
+
+    print(f"\nMethod 4 - Filtered Matrix ({len(filtered_results)}):")
+    for i, mapping in enumerate(filtered_results, 1):
+        print(f"  Isomorphism {i}: {V7} → {[V8[idx] for idx in mapping]}")
+
+    print(f"\nGraphs are {'ISOMORPHIC' if len(iso_results) > 0 else 'NOT ISOMORPHIC'}")
+
+    # Verify that methods 2, 3, and 4 produce identical results
+    compare_method_results(G7, G8)
+
+    # Test Case 5: Square without diagonal non-isomorphic graphs
+    print("\n" + "=" * 60)
+    print("TEST 5: Square without diagonal non-isomorphic graphs")
+    print("=" * 60)
     print(f"Graph 1: Vertices {V9}, Edges {E9}")
     print(f"Graph 2: Vertices {V10}, Edges {E10}")
-    
+
     # Get results for each algorithm
     dt_candidates = decision_tree_candidates(G9, G10)
     iso_results = isomorphism_checker(G9, G10)
     matrix_results = matrix_isomorphisms(G9, G10)
     filtered_results = filtered_matrix_isomorphisms(G9, G10)
-    
+
     # Display results
     print("\nRESULTS:")
-    print(f"Method 1 - Decision Tree Candidates: {len(dt_candidates)} candidates")
-    print(f"Method 2 - Isomorphism Checker: {len(iso_results)} isomorphisms")
-    print(f"Method 3 - Matrix Approach: {len(matrix_results)} isomorphisms")
-    print(f"Method 4 - Filtered Matrix: {len(filtered_results)} isomorphisms")
-    print(f"Graphs are {'ISOMORPHIC' if len(iso_results) > 0 else 'NOT ISOMORPHIC'}")
+    print(f"Method 1 - Decision Tree Candidates ({len(dt_candidates)}):")
+    for i, mapping in enumerate(dt_candidates, 1):
+        print(f"  Mapping {i}: {V9} → {[V10[idx] for idx in mapping]}")
+
+    print(f"\nMethod 2 - Isomorphism Checker ({len(iso_results)}):")
+    for i, mapping in enumerate(iso_results, 1):
+        print(f"  Isomorphism {i}: {V9} → {[V10[idx] for idx in mapping]}")
+
+    print(f"\nMethod 3 - Matrix Approach ({len(matrix_results)}):")
+    for i, mapping in enumerate(matrix_results, 1):
+        print(f"  Isomorphism {i}: {V9} → {[V10[idx] for idx in mapping]}")
+
+    print(f"\nMethod 4 - Filtered Matrix ({len(filtered_results)}):")
+    for i, mapping in enumerate(filtered_results, 1):
+        print(f"  Isomorphism {i}: {V9} → {[V10[idx] for idx in mapping]}")
+
+    print(f"\nGraphs are {'ISOMORPHIC' if len(iso_results) > 0 else 'NOT ISOMORPHIC'}")
+
+    # Verify that methods 2, 3, and 4 produce identical results
+    compare_method_results(G9, G10)
+
 
 run_methods()
 
